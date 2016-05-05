@@ -16,6 +16,7 @@
 		C7998EB71CDB112800962B42 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7998EB51CDB112800962B42 /* LaunchScreen.storyboard */; };
 		C7998EC21CDB112800962B42 /* UITableViewDemoOneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7998EC11CDB112800962B42 /* UITableViewDemoOneTests.m */; };
 		C7998ECD1CDB112800962B42 /* UITableViewDemoOneUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C7998ECC1CDB112800962B42 /* UITableViewDemoOneUITests.m */; };
+		C7998EE51CDB649300962B42 /* NewSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7998EE41CDB649300962B42 /* NewSearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		C7998EC81CDB112800962B42 /* UITableViewDemoOneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UITableViewDemoOneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7998ECC1CDB112800962B42 /* UITableViewDemoOneUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UITableViewDemoOneUITests.m; sourceTree = "<group>"; };
 		C7998ECE1CDB112800962B42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7998EE31CDB649300962B42 /* NewSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewSearchViewController.h; sourceTree = "<group>"; };
+		C7998EE41CDB649300962B42 /* NewSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewSearchViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +110,8 @@
 				C7998EA81CDB112800962B42 /* AppDelegate.m */,
 				C7998EAA1CDB112800962B42 /* ViewController.h */,
 				C7998EAB1CDB112800962B42 /* ViewController.m */,
+				C7998EE31CDB649300962B42 /* NewSearchViewController.h */,
+				C7998EE41CDB649300962B42 /* NewSearchViewController.m */,
 				C7998EAD1CDB112800962B42 /* Main.storyboard */,
 				C7998EB31CDB112800962B42 /* Assets.xcassets */,
 				C7998EB51CDB112800962B42 /* LaunchScreen.storyboard */,
@@ -209,7 +214,6 @@
 				TargetAttributes = {
 					C7998EA01CDB112700962B42 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = YYY2FTXY4S;
 					};
 					C7998EBC1CDB112800962B42 = {
 						CreatedOnToolsVersion = 7.3;
@@ -276,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7998EAC1CDB112800962B42 /* ViewController.m in Sources */,
+				C7998EE51CDB649300962B42 /* NewSearchViewController.m in Sources */,
 				C7998EA91CDB112800962B42 /* AppDelegate.m in Sources */,
 				C7998EA61CDB112700962B42 /* main.m in Sources */,
 				C7998EB21CDB112800962B42 /* UITableViewDemoOne.xcdatamodeld in Sources */,
@@ -419,7 +424,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = UITableViewDemoOne/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimakaiyuan.UITableViewDemoOne;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -430,7 +437,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = UITableViewDemoOne/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhimakaiyuan.UITableViewDemoOne;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -1,25 +1,22 @@
 //
-//  ViewController.m
+//  NewSearchViewController.m
 //  UITableViewDemoOne
 //
 //  Created by LHL on 16/5/5.
 //
 //
 
-#import "ViewController.h"
 #import "NewSearchViewController.h"
 
-@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchDisplayDelegate>
-{
-}
+@interface NewSearchViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchControllerDelegate,UISearchResultsUpdating>
 @property (nonatomic ,strong)UITableView *demoTableView;
-@property (nonatomic ,strong)UISearchBar *searchBar;
-@property (nonatomic ,strong)UISearchDisplayController *searchDC;
+@property (nonatomic ,strong)UISearchController *searchVC;
 @property (nonatomic ,strong)NSMutableArray *exampleArr;
 @property (nonatomic ,strong)NSMutableArray *searchArr;
+
 @end
 
-@implementation ViewController
+@implementation NewSearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,7 +24,6 @@
     _exampleArr = [NSMutableArray arrayWithCapacity:200];
     CGRect rectStatus = [[UIApplication sharedApplication] statusBarFrame];
     self.demoTableView.frame = CGRectMake(0, rectStatus.size.height, self.view.frame.size.width, self.view.frame.size.height - rectStatus.size.height);
-    self.searchBar.frame = CGRectMake(0, rectStatus.size.height, self.view.frame.size.width, 50.0);
     for (int i = 0; i < 200; i ++) {
         int NUMBER_OF_CHARS = 5;
         char data[NUMBER_OF_CHARS];//生成一个五位数的字符串
@@ -36,6 +32,13 @@
         [_exampleArr addObject:string];
     }//随机生成200个五位数的字符串
     NSLog(@"%@",_exampleArr);
+
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath//cell
@@ -45,26 +48,25 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
     }
-    if (tableView == self.demoTableView) {
+    if (!self.searchVC.active) {
         cell.textLabel.text = [NSString stringWithFormat:@"%@",_exampleArr[indexPath.row]];
-
+        
     }else
     {
         cell.textLabel.text = [NSString stringWithFormat:@"%@",_searchArr[indexPath.row]];
-
+        
     }
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.searchDC.searchResultsTableView) {
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self contains [cd] %@",_searchDC.searchBar.text];
-        _searchArr =  [[NSMutableArray alloc] initWithArray:[_exampleArr filteredArrayUsingPredicate:predicate]];
-
+    if (self.searchVC.active) {
         return self.searchArr.count;//搜索结果
     }else
-    return self.exampleArr.count;//原始数据
+    {
+        return self.exampleArr.count;//原始数据
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -78,24 +80,18 @@
     [self presentViewController:vc animated:YES completion:nil];
     
 }
--(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-    if (searchText != nil && searchText.length > 0)
-    {
-        self.searchArr = [NSMutableArray array];//这里可以说是清空tableview旧datasouce
-        for (NSString *str in _exampleArr)
-        {
-            if ([str rangeOfString:searchText options:NSCaseInsensitiveSearch].length > 0)
-            {
-                [_searchArr addObject:str];
-            }
-        }
-        [_demoTableView reloadData];
-    }else
-    {
-        self.searchArr = [NSMutableArray arrayWithArray:_exampleArr];
-        [_demoTableView reloadData];
+    NSString *searchString = [self.searchVC.searchBar text];
+    NSPredicate *preicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS[c] %@", searchString];
+    if (self.searchArr!= nil) {
+        [self.searchArr removeAllObjects];
     }
+    //过滤数据
+    self.searchArr= [NSMutableArray arrayWithArray:[_exampleArr filteredArrayUsingPredicate:preicate]];
+    //刷新表格
+    [self.demoTableView reloadData];
 }
 
 - (UITableView *)demoTableView
@@ -110,30 +106,32 @@
     }
     return _demoTableView;
 }
-- (UISearchDisplayController *)searchDC
-{
-    if (!_searchDC) {
-        _searchDC = [[UISearchDisplayController alloc]initWithSearchBar:_searchBar contentsController:self];
-        _searchDC.delegate = self;
-        _searchDC.searchResultsDelegate = self;
-        _searchDC.searchResultsDataSource = self;
-    }
-    return _searchDC;
-}
 
-- (UISearchBar *)searchBar
+- (UISearchController *)searchVC
 {
-    if (!_searchBar) {
-        _searchBar = [[UISearchBar alloc]init];
-        _searchBar.delegate = self;
-        _searchBar.searchBarStyle = UISearchBarStyleDefault;
-        _demoTableView.tableHeaderView = _searchBar;
+    if (!_searchVC) {
+        
+        _searchVC = [[UISearchController alloc]initWithSearchResultsController:nil];
+        _searchVC.searchResultsUpdater = self;
+        
+        _searchVC.dimsBackgroundDuringPresentation = NO;
+        
+        _searchVC.hidesNavigationBarDuringPresentation = NO;
+        
+        _searchVC.searchBar.frame = CGRectMake(self.searchVC.searchBar.frame.origin.x, self.searchVC.searchBar.frame.origin.y, self.searchVC.searchBar.frame.size.width, 44.0);
+        
+        self.demoTableView.tableHeaderView = self.searchVC.searchBar;
     }
-    return _searchBar;
+    return _searchVC;
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
 }
+*/
 
 @end
